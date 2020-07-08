@@ -89,14 +89,14 @@ export default function App() {
     const pressure = weather ? (weather.main.pressure - 1000) : 0
     const sun_radius = Math.round(Math.min(dimensions.width, dimensions.height) / 10)
     const wind_speed = (weather && 'wind' in weather) ? weather.wind.speed : 0
-    console.log('wind:', wind_speed)
+    //console.log('wind:', wind_speed)
 //    console.log('sun_radius:', sun_radius)
   //  console.log('dimensions:', dimensions)
 
     return (
         <View style={ styles.container }>
             <Sun temp={temp} sun_radius={sun_radius}/>
-            <Sky wind_speed={wind_speed} opacity={opacity_clouds} /> 
+            {weather && <Sky wind_speed={weather.wind.speed} opacity={opacity_clouds} /> }
             <Ground />
             <Dash temp={temp} height={term_height} pressure={pressure} />
         </View>
