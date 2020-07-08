@@ -97,7 +97,7 @@ export default function App() {
         <View style={ styles.container }>
             {weather && <Sun temp={temp} sun_radius={sun_radius}/> }
             {weather && <Sky wind_speed={weather.wind.speed} opacity={opacity_clouds} /> }
-            {weather && <Ground /> }
+            {weather && <Ground height={dimensions.height}/> }
             {weather && <Dash temp={temp} height={term_height} pressure={pressure} /> }
         </View>
 
