@@ -41,8 +41,8 @@ export default function Sky(props) {
         cloud1: {
             position: 'absolute',
             left: 0,
-            width: '100%',
-        //    height: Math.round(sky.height / ratio_cloud1),
+            width: dimensions.width,
+            height: Math.round(dimensions.width / ratio_cloud1),
             opacity: props.opacity,
             overflow: 'hidden',
             transform: [{
@@ -55,8 +55,8 @@ export default function Sky(props) {
         cloud2: {
             position: 'absolute',
             left: '-70%',
-            width: '100%',
-         //   height: Math.round(sky.height / ratio_cloud3),
+            width: dimensions.width,
+            height: Math.round(dimensions.width / ratio_cloud3),
             opacity: props.opacity,
             overflow: 'hidden',
             transform: [{
@@ -69,7 +69,8 @@ export default function Sky(props) {
         cloud3: {
             position: 'absolute',
             left: '-100%',
-            width: '100%',
+            width: dimensions.width,
+            height: Math.round(dimensions.width / ratio_cloud1),
             opacity: props.opacity,
             overflow: 'hidden',
             transform: [{
@@ -83,7 +84,8 @@ export default function Sky(props) {
             position: 'absolute',
             left: '30%',
             opacity: props.opacity,
-            width: '100%',
+            width: dimensions.width,
+            height: Math.round(dimensions.width / ratio_cloud3),
             overflow: 'hidden',
             transform: [{
                 translateX: cloud_position.interpolate({
@@ -99,7 +101,6 @@ export default function Sky(props) {
             <Animated.Image style={ StyleSheet.flatten([styles.clouds, styles.cloud1]) } source={cloud1} />
             <Animated.Image style={ StyleSheet.flatten([styles.clouds, styles.cloud2]) } source={cloud3} />
             <Animated.Image style={ StyleSheet.flatten([styles.clouds, styles.cloud3]) } source={cloud1} />
-            <Animated.Image style={ StyleSheet.flatten([styles.clouds, styles.cloud4]) } source={cloud3} />
             <Animated.Image style={ StyleSheet.flatten([styles.clouds, styles.cloud4]) } source={cloud3} />
         </Animated.View>
     )

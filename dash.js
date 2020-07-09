@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     baseText: {
         fontWeight: 'bold',
         color: '#ffffff',
-        paddingRight: 20
+        paddingRight: 0
     }
 
 })
