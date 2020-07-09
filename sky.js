@@ -37,6 +37,7 @@ export default function Sky(props) {
             flex: 0.3,
             width: sky.width,
             height: sky.height,
+            backgoundColor: '#ff0000'
         },
         cloud1: {
             position: 'absolute',

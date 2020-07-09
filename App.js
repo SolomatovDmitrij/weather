@@ -18,11 +18,21 @@ export default function App() {
     const [weather, set_weather] = useState(null);
     const [city, set_city] = useState(null);
 
-//    const to_cell = (forengeit) =>  ((forengeit - 32) / 1.8).toFixed(1) 
-
     function get_time(time_utc) {
         let date = new Date(time_utc*1000)
         return date.toLocaleString()
+    }
+
+    function get_color_of_sky(clouds_percent) {
+        const koeff = Math.round(clouds_percent * 1.5)
+        const r = to_hex(koeff)
+        const g = to_hex(koeff)
+        const b = to_hex(255 - koeff)
+        return ('#' + r + g + b )
+
+    }
+    function to_hex(dig) {
+         return ('0' + dig.toString(16)).slice(-2)     
     }
 
     function fetchWeather(lat, lon) {
@@ -46,8 +56,6 @@ export default function App() {
                 //          setLocation({latitude: 55.0267716, longitude: 82.9288806})
                 return
             }
-
-
             let {coords} = await Location.getCurrentPositionAsync({});
             setLocation(coords);
         })();
@@ -56,11 +64,7 @@ export default function App() {
     useEffect(() => {
         (async () => {
             if(!my_location) { return null }
-            //            if(my_location.coords) {
-            //                await fetchWeather(my_location.coords.latitude, my_location.coords.longitude)
-            //            } else {
             await fetchWeather(my_location.latitude, my_location.longitude)
-            //            }
         })();
     }, [my_location])
 
@@ -71,37 +75,20 @@ export default function App() {
         text = JSON.stringify(my_location);
     }
     const temp = (weather && 'feels_like' in weather.main) ? weather.main.feels_like : 0
-//    const back_color = get_color_style(temp)
-//    const style_container = StyleSheet.flatten([
- //       styles.container,
-  //      back_color
-   // ])
-    /*
-    const style_cloud = StyleSheet.flatten([
-        {
-            opacity: weather ? weather.clouds.all / 100 : 0,
-            width: dimensions.width,
-            height:  Math.round(dimensions.width / 2.36)
-
-        }
-    ])
-    */
-//    const opacity_clouds = 99 / 100
     
     const term_height = Math.round(dimensions.height / 10)
     const pressure = weather ? (weather.main.pressure - 1000) : 0
     const sun_radius = Math.round(Math.min(dimensions.width, dimensions.height) / 10)
     const wind_speed = (weather && 'wind' in weather) ? weather.wind.speed : 0
-    //console.log('wind:', wind_speed)
-//    console.log('sun_radius:', sun_radius)
-  //  console.log('dimensions:', dimensions)
 
     return (
-        <View style={ styles.container }>
+        <View style={[ styles.container, {
+            backgroundColor: get_color_of_sky(weather ? weather.clouds.all : 0 )
+//            backgroundColor: get_color_of_sky(10)
+        } ] }>
                 {weather && <Sun temp={temp} sun_radius={sun_radius}/> }
                 {weather && <Sky wind_speed={weather.wind.speed} 
                     opacity={weather.clouds.all / 100} 
-//                    opacity={opacity_clouds}
                         /> }
                 {weather && <Ground height={dimensions.height} width={dimensions.width}/> }
                 {weather && <Dash temp={temp} height={term_height} pressure={pressure}
@@ -111,33 +98,13 @@ export default function App() {
         </View>
 
     )
-
-    /*
-    return (
-        <View style={ styles.container }>
-
-        <ImageBackground style={ style_cloud } source={oper}>
-        {weather && <Text>{(weather.name)}</Text> }
-        {weather && <Sun temp={temp} />}
-        {weather && <Text>Облачность: {(weather.clouds.all)}%</Text> }
-        {weather && <Text>Температура: {(weather.main.temp)}°C</Text> }
-        {weather && <Text>Ощущается как {temp}°C</Text> }
-        {weather && <Text>Давление: {weather.main.pressure} ГПа</Text> }
-        {weather && <Text>Влажность: {weather.main.humidity}%</Text> }
-        {weather && weather.wind && <Text>Скорость ветра: {weather.wind.speed} м/c</Text> }
-        {weather && <Text>Восход: {get_time(weather.sys.sunrise)}</Text> }
-        {weather && <Text>Закат: {get_time(weather.sys.sunset)}</Text> }
-        </ImageBackground>
-        </View>
-    );
-    */
 }
 
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'column',
         flex: 1,
-        backgroundColor: '#0000f0',
+        backgroundColor: '#000000',
     },
 });
 
