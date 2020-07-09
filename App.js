@@ -76,6 +76,7 @@ export default function App() {
  //       styles.container,
   //      back_color
    // ])
+    /*
     const style_cloud = StyleSheet.flatten([
         {
             opacity: weather ? weather.clouds.all / 100 : 0,
@@ -84,7 +85,9 @@ export default function App() {
 
         }
     ])
-    const opacity_clouds = 0.5
+    */
+//    const opacity_clouds = 99 / 100
+    
     const term_height = Math.round(dimensions.height / 10)
     const pressure = weather ? (weather.main.pressure - 1000) : 0
     const sun_radius = Math.round(Math.min(dimensions.width, dimensions.height) / 10)
@@ -95,10 +98,16 @@ export default function App() {
 
     return (
         <View style={ styles.container }>
-            {weather && <Sun temp={temp} sun_radius={sun_radius}/> }
-            {weather && <Sky wind_speed={weather.wind.speed} opacity={opacity_clouds} /> }
-            {weather && <Ground height={dimensions.height}/> }
-            {weather && <Dash temp={temp} height={term_height} pressure={pressure} /> }
+                {weather && <Sun temp={temp} sun_radius={sun_radius}/> }
+                {weather && <Sky wind_speed={weather.wind.speed} 
+                    opacity={weather.clouds.all / 100} 
+//                    opacity={opacity_clouds}
+                        /> }
+                {weather && <Ground height={dimensions.height} width={dimensions.width}/> }
+                {weather && <Dash temp={temp} height={term_height} pressure={pressure}
+                        speed={weather.wind.speed} 
+                        clouds={weather.clouds.all}
+                        /> }
         </View>
 
     )
