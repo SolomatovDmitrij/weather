@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dimensions, ImageBackground ,Image, Text, View, StyleSheet } from 'react-native';
 import * as Location from 'expo-location';
+import * as ScreenOrientation from 'expo-screen-orientation';
 import clouds2 from './img/clouds2.png'
 import oper from './img/oper.png'
 import Sun from './sun'
@@ -16,14 +17,19 @@ export default function App() {
     const [my_location, setLocation] = useState({latitude: 55.0267716, longitude: 82.9288806});
     const [errorMsg, setErrorMsg] = useState(null);
     const [weather, set_weather] = useState(null);
-    const [city, set_city] = useState(null);
+    const [update, set_update] = useState(0);
 
     function get_time(time_utc) {
         let date = new Date(time_utc*1000)
         return date.toLocaleString()
     }
 
-    function get_color_of_sky(clouds_percent) {
+    function get_color_of_sky(clouds_percent, sys) {
+        const now_date = Math.round(Date.now() / 1000)
+        //проверим текущее время, чтобы определить ночь сейчас или нет
+        if(now_date < sys.sunrise || now_date > sys.sunset) {
+            return ('#000000')
+        }
         const koeff = Math.round(clouds_percent * 1.5)
         const r = to_hex(koeff)
         const g = to_hex(koeff)
@@ -74,6 +80,13 @@ export default function App() {
     } else if (my_location) {
         text = JSON.stringify(my_location);
     }
+
+    useEffect(() => {
+        ScreenOrientation.addOrientationChangeListener(() => {
+            set_update(Math.random())
+        })
+    }, [])
+
     const temp = (weather && 'feels_like' in weather.main) ? weather.main.feels_like : 0
     
     const term_height = Math.round(dimensions.height / 10)
@@ -83,8 +96,7 @@ export default function App() {
 
     return (
         <View style={[ styles.container, {
-            backgroundColor: get_color_of_sky(weather ? weather.clouds.all : 0 )
-//            backgroundColor: get_color_of_sky(10)
+            backgroundColor: (weather ? get_color_of_sky(weather.clouds.all, weather.sys) : '#0000ff')
         } ] }>
                 {weather && <Sun temp={temp} sun_radius={sun_radius}/> }
                 {weather && <Sky wind_speed={weather.wind.speed} 
