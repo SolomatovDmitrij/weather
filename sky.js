@@ -17,7 +17,7 @@ export default function Sky(props) {
     }
     
     const cloud_position = useRef( new Animated.Value(0) ).current
-    const duration_time = Math.round(1000000 / props.wind_speed ** 2)
+    const duration_time = Math.round(dimensions.width * 6000 / props.wind_speed ** 2)
     const run_animation = () => {
         cloud_position.setValue(0)
 //        console.log('duration:', duration_time)
